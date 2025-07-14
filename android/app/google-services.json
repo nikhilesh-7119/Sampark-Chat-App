@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "572652840509",
+    "project_id": "sampark-chatapp",
+    "storage_bucket": "sampark-chatapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572652840509:android:238ca0b37f9e3feb056c54",
+        "android_client_info": {
+          "package_name": "com.example.sampark_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDM3fhpd7A0BiCE1v7psG1bT20_U0nqYnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
