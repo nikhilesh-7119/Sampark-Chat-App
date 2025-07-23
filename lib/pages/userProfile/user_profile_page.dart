@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sampark_app/config/images.dart';
 import 'package:sampark_app/controller/auth_controller.dart';
 import 'package:sampark_app/controller/profile_controller.dart';
+import 'package:sampark_app/model/user_model.dart';
 import 'package:sampark_app/pages/userProfile/widgets/user_info.dart';
 
 class UserProfilePage extends StatelessWidget {
-  const UserProfilePage({super.key});
+  final UserModel userModel;
+  const UserProfilePage({super.key, required this.userModel});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,11 @@ class UserProfilePage extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            LoginUserInfo(),
+            LoginUserInfo(
+              profileImage: userModel.profileImage ?? AssetsImage.defaultProfileUrl,
+              userEmail: userModel.email??'',
+              userName: userModel.name ?? 'User',
+            ),
             Spacer(),
             ElevatedButton(onPressed: () {
               authController.logoutUser();

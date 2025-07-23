@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sampark_app/controller/profile_controller.dart';
 import 'package:sampark_app/model/chat_model.dart';
+import 'package:sampark_app/model/chat_room_model.dart';
+import 'package:sampark_app/model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatController extends GetxController {
@@ -10,7 +13,7 @@ class ChatController extends GetxController {
   final db = FirebaseFirestore.instance;
   RxBool isLoading = false.obs;
   var uuid = Uuid();
-  ProfileController profileController=Get.put(ProfileController());
+  ProfileController profileController = Get.put(ProfileController());
 
   String getRoomId(String targetUserId) {
     String currentUserId = auth.currentUser!.uid;
@@ -21,21 +24,32 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> sendMessage(
-    String targetUserId,
-    String message,
-  ) async {
+  Future<void> sendMessage(String targetUserId, String message, UserModel targetUser) async {
     isLoading.value = true;
     String chatId = uuid.v6();
     String roomId = getRoomId(targetUserId);
+    DateTime timeStamp= DateTime.now();
+    String nowTime=DateFormat('hh:mm a').format(timeStamp);
     var newChat = ChatModel(
       message: message,
       id: chatId,
       senderId: auth.currentUser!.uid,
       receiverId: targetUserId,
       senderName: profileController.currentUser.value.name,
+      timeStamp: DateTime.now().toString()
+    );
+
+    var roomDetails=ChatRoomModel(
+      id: roomId,
+      lastMessage: message,
+      lastMessageTimeStamp: nowTime,
+      sender: profileController.currentUser.value,
+      receiver: targetUser,
+      timeStamp: DateTime.now().toString(),
+      unReadMessNo: 0,
     );
     try {
+      await db.collection('chats').doc(roomId).set(roomDetails.toJson());
       await db
           .collection('chats')
           .doc(roomId)
@@ -46,5 +60,20 @@ class ChatController extends GetxController {
       print(e);
     }
     isLoading.value = false;
+  }
+
+  Stream<List<ChatModel>> getMessages(String targetUserId) {
+    String roomId = getRoomId(targetUserId);
+    return db
+        .collection('chats')
+        .doc(roomId)
+        .collection('messages')
+        .orderBy('timeStamp', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => ChatModel.fromJson(doc.data()))
+              .toList(),
+        );
   }
 }

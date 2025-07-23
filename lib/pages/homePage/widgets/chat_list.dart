@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sampark_app/config/images.dart';
+import 'package:sampark_app/controller/contactController.dart';
+import 'package:sampark_app/pages/Chat/chat_page.dart';
 import 'package:sampark_app/pages/homePage/widgets/chat_tile.dart';
 
 class ChatList extends StatelessWidget {
@@ -8,20 +10,30 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        InkWell(
-          onTap: (){
-            Get.toNamed('/chatPage');
-          },
-          child: ChatTile(
-            name: 'SSSA KUMARI',
-            imageUrl: AssetsImage.defaultProfileUrl,
-            lastTime: '09:23 PM',
-            lastChat: 'Bad me baat karta hun',
-          ),
+    Contactcontroller contactcontroller = Get.put(Contactcontroller());
+    return RefreshIndicator(
+      child: Obx(
+        () => ListView(
+          children: contactcontroller.chatRoomList
+              .map(
+                (e) => InkWell(
+                  onTap: () {
+                    Get.to(ChatPage(userModel: e.receiver!));
+                  },
+                  child: ChatTile(
+                    name: e.receiver!.name ?? 'User Name',
+                    imageUrl: e.receiver!.profileImage ?? AssetsImage.defaultProfileUrl,
+                    lastTime: e.lastMessageTimeStamp ?? 'Last Time',
+                    lastChat: e.lastMessage ?? 'Last Message',
+                  ),
+                ),
+              )
+              .toList(),
         ),
-      ],
+      ),
+      onRefresh: (){
+        return contactcontroller.getChatRoomList();
+      },
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sampark_app/controller/auth_controller.dart';
@@ -116,15 +116,16 @@ class ProfilePage extends StatelessWidget {
                                               null
                                           ? Icon(Icons.image)
                                           : ClipRRect(
-                                              child: Image.network(
-                                                profileController
+                                            borderRadius: BorderRadius.circular(100),
+                                              child: CachedNetworkImage(
+                                                imageUrl: profileController
                                                     .currentUser
                                                     .value
                                                     .profileImage!,
                                                 fit: BoxFit.cover,
+                                                placeholder: (context,url)=>CircularProgressIndicator(),
+                                                errorWidget: (context,url,error)=>Icon(Icons.error),
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
                                             ),
                                     ),
                             ),

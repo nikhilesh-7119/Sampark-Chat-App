@@ -1,10 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sampark_app/config/images.dart';
 import 'package:sampark_app/controller/profile_controller.dart';
 
 class LoginUserInfo extends StatelessWidget {
-  const LoginUserInfo({super.key});
+  final String profileImage;
+  final String userName;
+  final String userEmail;
+  const LoginUserInfo({
+    super.key,
+    required this.profileImage,
+    required this.userName,
+    required this.userEmail,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,28 +33,32 @@ class LoginUserInfo extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Image.asset(AssetsImage.boyPic)],
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: CachedNetworkImage(imageUrl: profileImage,fit: BoxFit.cover,
+                      placeholder: (context,url)=>CircularProgressIndicator(),
+                      errorWidget: (context,url,error)=>Icon(Icons.error),)
+                      
+                    ),
+                  ],
                 ),
                 SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Obx(()=>
-                        Text(
-                        profileController.currentUser.value.name ?? 'User',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                    Text(
+                      userName,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Obx(()=>
-                        Text(
-                        profileController.currentUser.value.email ?? 'Example@gmail.com',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
+                    Text(
+                      userEmail,
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ],
                 ),

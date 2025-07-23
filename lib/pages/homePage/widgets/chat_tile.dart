@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sampark_app/config/images.dart';
 
@@ -32,8 +33,14 @@ class ChatTile extends StatelessWidget {
                 height: 70,
                 width: 70,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.network(imageUrl, width: 70, fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(70),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    fit: BoxFit.cover,
+                    width: 70,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               ),
               SizedBox(width: 15),

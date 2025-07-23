@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sampark_app/config/images.dart';
 import 'package:sampark_app/config/strings.dart';
+import 'package:sampark_app/controller/contactController.dart';
 import 'package:sampark_app/controller/image_picker.dart';
 import 'package:sampark_app/controller/profile_controller.dart';
 import 'package:sampark_app/pages/homePage/widgets/chat_list.dart';
@@ -20,6 +21,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 3, vsync: this);
+    Contactcontroller contactcontroller=Get.put(Contactcontroller());
     ProfileController profileController = Get.put(ProfileController());
     ImagePickerController image=Get.put(ImagePickerController());
     
@@ -38,10 +40,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         actions: [
           IconButton(onPressed: () {
+            contactcontroller.getChatRoomList();
           }, icon: Icon(Icons.search)),
           IconButton(
             onPressed: () {
-              // Get.offAllNamed('/profilePage');
               Get.to(ProfilePage());
             },
             icon: Icon(Icons.more_vert),
