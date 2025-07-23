@@ -6,7 +6,13 @@ class ChatTile extends StatelessWidget {
   final String imageUrl;
   final String lastTime;
   final String lastChat;
-  const ChatTile({super.key, required this.name, required this.imageUrl, required this.lastTime, required this.lastChat});
+  const ChatTile({
+    super.key,
+    required this.name,
+    required this.imageUrl,
+    required this.lastTime,
+    required this.lastChat,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +28,29 @@ class ChatTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset(imageUrl,width: 70,),
-              SizedBox(width: 15,),
+              Container(
+                height: 70,
+                width: 70,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(imageUrl, width: 70, fit: BoxFit.cover),
+                ),
+              ),
+              SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Text(name,style: Theme.of(context).textTheme.bodyLarge,),
-                SizedBox(height: 5,),
-                Text(lastChat,style: Theme.of(context).textTheme.labelMedium,),
-              ],),
+                  Text(name, style: Theme.of(context).textTheme.bodyLarge),
+                  SizedBox(height: 5),
+                  Text(
+                    lastChat,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                ],
+              ),
             ],
           ),
-          Text(lastTime,style: Theme.of(context).textTheme.labelMedium,),
+          Text(lastTime, style: Theme.of(context).textTheme.labelMedium),
         ],
       ),
     );

@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:sampark_app/config/images.dart';
+import 'package:sampark_app/controller/chat_controller.dart';
+import 'package:sampark_app/model/chat_model.dart';
+import 'package:sampark_app/model/user_model.dart';
 import 'package:sampark_app/pages/Chat/widgets/chat_bubble.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
+  final UserModel userModel;
+  const ChatPage({super.key, required this.userModel});
 
   @override
   Widget build(BuildContext context) {
+    ChatController chatController = Get.put(ChatController());
+    TextEditingController messageController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
@@ -17,7 +24,10 @@ class ChatPage extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Nitish Kumar', style: Theme.of(context).textTheme.bodyLarge),
+            Text(
+              userModel.name ?? 'User',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             Text('Online', style: Theme.of(context).textTheme.labelSmall),
           ],
         ),
@@ -30,25 +40,48 @@ class ChatPage extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
         margin: EdgeInsets.all(10),
-        padding: EdgeInsets.symmetric(vertical: 5,horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: Theme.of(context).colorScheme.primaryContainer
+          color: Theme.of(context).colorScheme.primaryContainer,
         ),
         child: Row(
           children: [
-            Container(height:25,width: 25,child:  SvgPicture.asset(AssetsImage.chatMicSvg)),
-            SizedBox(width: 10,),
-            Expanded(child: TextField(
-              decoration: InputDecoration(
-                filled: false,
-                hintText: 'Type message ...'
+            Container(
+              height: 25,
+              width: 25,
+              child: SvgPicture.asset(AssetsImage.chatMicSvg),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                controller: messageController,
+                decoration: const InputDecoration(
+                  filled: false,
+                  hintText: 'Type message ...',
+                ),
               ),
-            )),
-            SizedBox(width: 10,),
-            Container(height: 30,width: 30, child: SvgPicture.asset(AssetsImage.chatGallerySvg,width: 25,)),
-            SizedBox(width: 10,),
-            Container(height: 30,width: 30, child: SvgPicture.asset(AssetsImage.chatSendSvg,width: 25,)),
+            ),
+            SizedBox(width: 10),
+            Container(
+              height: 30,
+              width: 30,
+              child: SvgPicture.asset(AssetsImage.chatGallerySvg, width: 25),
+            ),
+            SizedBox(width: 10),
+            InkWell(
+              onTap: (){
+                if(messageController.text.isNotEmpty){
+                  chatController.sendMessage(userModel.id!, messageController.text);
+                  messageController.clear();
+                }
+              },
+              child: Container(
+                height: 30,
+                width: 30,
+                child: SvgPicture.asset(AssetsImage.chatSendSvg, width: 25),
+              ),
+            ),
           ],
         ),
       ),
@@ -66,7 +99,7 @@ class ChatPage extends StatelessWidget {
             ),
             ChatBubble(
               message: 'hello gello how r u',
-              isComing: false ,
+              isComing: false,
               time: '10:10 AM',
               status: 'read',
               imageUrl: '',
@@ -76,11 +109,12 @@ class ChatPage extends StatelessWidget {
               isComing: false,
               time: '10:10 AM',
               status: 'read',
-              imageUrl: 'https://creatypestudio.co/wp-content/uploads/2021/06/google-fonts.png',
+              imageUrl:
+                  'https://creatypestudio.co/wp-content/uploads/2021/06/google-fonts.png',
             ),
             ChatBubble(
               message: 'hello gello how r u',
-              isComing: true ,
+              isComing: true,
               time: '10:10 AM',
               status: 'read',
               imageUrl: '',
@@ -90,11 +124,12 @@ class ChatPage extends StatelessWidget {
               isComing: true,
               time: '10:10 AM',
               status: 'read',
-              imageUrl: 'https://creatypestudio.co/wp-content/uploads/2021/06/google-fonts.png',
+              imageUrl:
+                  'https://creatypestudio.co/wp-content/uploads/2021/06/google-fonts.png',
             ),
             ChatBubble(
               message: 'hello gello how r u',
-              isComing: false ,
+              isComing: false,
               time: '10:10 AM',
               status: 'read',
               imageUrl: '',
@@ -104,7 +139,8 @@ class ChatPage extends StatelessWidget {
               isComing: false,
               time: '10:10 AM',
               status: 'read',
-              imageUrl: 'https://creatypestudio.co/wp-content/uploads/2021/06/google-fonts.png',
+              imageUrl:
+                  'https://creatypestudio.co/wp-content/uploads/2021/06/google-fonts.png',
             ),
           ],
         ),

@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     TabController tabController = TabController(length: 3, vsync: this);
     ProfileController profileController = Get.put(ProfileController());
     ImagePickerController image=Get.put(ImagePickerController());
+    
 
 
     return Scaffold(
@@ -37,7 +38,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         actions: [
           IconButton(onPressed: () {
-            image.pickImage();
           }, icon: Icon(Icons.search)),
           IconButton(
             onPressed: () {
@@ -50,7 +50,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         bottom: myTabBar(tabController, context),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Get.toNamed('/contactPage');
+        },
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(
           Icons.add,

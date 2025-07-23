@@ -37,20 +37,25 @@ class ProfileController extends GetxController {
     String about,
     String number,
   ) async {
+    // print(imageUrl+'--------------');
     isLoading.value = true;
     try{
       final imageLink= await uploadFileToSupabase(imageUrl);
 
     final updatedUserModel=UserModel(
+      id:auth.currentUser!.uid,
+      email: auth.currentUser!.email,
       name: name,
       about: about,
-      profileImage: imageLink,
+      profileImage: imageUrl=='' ? currentUser.value.profileImage : imageLink,
       phoneNumber: number,
     );
 
     await db.collection('users').doc(auth.currentUser!.uid).set(
       updatedUserModel.toJson(),
     );
+
+    await getUserDetails();
 
     } catch(e){
       print(e.toString());

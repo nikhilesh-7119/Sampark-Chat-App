@@ -16,7 +16,7 @@ class ChatList extends StatelessWidget {
           },
           child: ChatTile(
             name: 'SSSA KUMARI',
-            imageUrl: AssetsImage.girlPic,
+            imageUrl: AssetsImage.defaultProfileUrl,
             lastTime: '09:23 PM',
             lastChat: 'Bad me baat karta hun',
           ),

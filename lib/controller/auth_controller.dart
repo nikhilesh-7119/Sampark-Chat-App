@@ -7,6 +7,7 @@ class AuthController extends GetxController {
   final auth = FirebaseAuth.instance;
   RxBool isLoading = false.obs;
   final db = FirebaseFirestore.instance;
+  final user=UserModel();
 
   //for login
   Future<void> login(String email, String password) async {
@@ -69,4 +70,5 @@ class AuthController extends GetxController {
       print(e.toString());
     }
   }
+
 }

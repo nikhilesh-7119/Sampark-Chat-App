@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sampark_app/controller/auth_controller.dart';
 import 'package:sampark_app/controller/image_picker.dart';
 import 'package:sampark_app/controller/profile_controller.dart';
 import 'package:sampark_app/widgets/primary_button.dart';
@@ -31,7 +33,17 @@ class ProfilePage extends StatelessWidget {
     RxString imagePath = ''.obs;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Profile')),
+      appBar: AppBar(
+        title: Text('Profile'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(AuthController().logoutUser());
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: ListView(
@@ -98,15 +110,10 @@ class ProfilePage extends StatelessWidget {
                                       ),
                                       child:
                                           profileController
-                                                      .currentUser
-                                                      .value
-                                                      .profileImage ==
-                                                  '' ||
-                                              profileController
-                                                      .currentUser
-                                                      .value
-                                                      .profileImage ==
-                                                  null
+                                                  .currentUser
+                                                  .value
+                                                  .profileImage ==
+                                              null
                                           ? Icon(Icons.image)
                                           : ClipRRect(
                                               child: Image.network(
@@ -184,32 +191,35 @@ class ProfilePage extends StatelessWidget {
                         ),
                         SizedBox(height: 20),
                         Obx(
-                          () => Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              isEdit.value
-                                  ? PrimaryButton(
-                                      btnName: 'SAVE',
-                                      icon: Icons.save,
-                                      onTap: () async {
-                                        await profileController.updateProfile(
-                                          imagePath.value,
-                                          name.text,
-                                          about.text,
-                                          phone.text,
-                                        );
-                                        isEdit.value = false;
-                                      },
-                                    )
-                                  : PrimaryButton(
-                                      btnName: 'EDIT',
-                                      icon: Icons.edit,
-                                      onTap: () {
-                                        isEdit.value = true;
-                                      },
-                                    ),
-                            ],
-                          ),
+                          () => profileController.isLoading.value
+                              ? Center(child: CircularProgressIndicator())
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    isEdit.value
+                                        ? PrimaryButton(
+                                            btnName: 'SAVE',
+                                            icon: Icons.save,
+                                            onTap: () async {
+                                              await profileController
+                                                  .updateProfile(
+                                                    imagePath.value,
+                                                    name.text,
+                                                    about.text,
+                                                    phone.text,
+                                                  );
+                                              isEdit.value = false;
+                                            },
+                                          )
+                                        : PrimaryButton(
+                                            btnName: 'EDIT',
+                                            icon: Icons.edit,
+                                            onTap: () {
+                                              isEdit.value = true;
+                                            },
+                                          ),
+                                  ],
+                                ),
                         ),
                         SizedBox(height: 20),
                       ],
