@@ -17,43 +17,28 @@ class ChatList extends StatelessWidget {
     return RefreshIndicator(
       child: Obx(
         () => ListView(
-          children: contactcontroller.chatRoomList
-              .map(
-                (e)  {
-                  UserModel send;
-                  // UserModel rec;
-                  if(e.receiver!.id ==
-                                profileController.currentUser.value.id){
-                                  send=e.sender!;
-                                  // rec=e.receiver!;
-                                } else{
-                                  send=e.receiver!;
-                                  // rec=e.sender!;
-                                }
-                  return InkWell(
-                  onTap: () {
-                    Get.to(
-                      ChatPage(
-                        userModel:
-                            (
-                            // ? e.sender
-                            // : e.receiver
-                            send
-                            ),
-                      ),
-                    );
-                  },
-                  child: ChatTile(
-                    name: send.name ?? 'User Name',
-                    imageUrl:
-                        send.profileImage ??
-                        AssetsImage.defaultProfileUrl,
-                    lastTime: e.lastMessageTimeStamp ?? 'Last Time',
-                    lastChat: e.lastMessage ?? 'Last Message',
-                  ),
-                );}
-              )
-              .toList(),
+          children: contactcontroller.chatRoomList.map((e) {
+            UserModel send;
+            // UserModel rec;
+            if (e.receiver!.id == profileController.currentUser.value.id) {
+              send = e.sender!;
+              // rec=e.receiver!;
+            } else {
+              send = e.receiver!;
+              // rec=e.sender!;
+            }
+            return InkWell(
+              onTap: () {
+                Get.to(ChatPage(userModel: send));
+              },
+              child: ChatTile(
+                name: send.name ?? 'User Name',
+                imageUrl: send.profileImage ?? AssetsImage.defaultProfileUrl,
+                lastTime: e.lastMessageTimeStamp ?? 'Last Time',
+                lastChat: e.lastMessage ?? 'Last Message',
+              ),
+            );
+          }).toList(),
         ),
       ),
       onRefresh: () {

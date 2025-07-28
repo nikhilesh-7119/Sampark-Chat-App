@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sampark_app/config/images.dart';
@@ -20,7 +21,7 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: Column(
         crossAxisAlignment: isComing
             ? CrossAxisAlignment.start
@@ -34,17 +35,19 @@ class ChatBubble extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: isComing? BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15),
-                bottomLeft: Radius.circular(0),
-                bottomRight: Radius.circular(15),
-              ):BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15),
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(0),
-              ),
+              borderRadius: isComing
+                  ? BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(15),
+                    )
+                  : BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(0),
+                    ),
             ),
             child: imageUrl == ''
                 ? Text(message)
@@ -53,10 +56,18 @@ class ChatBubble extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.network(imageUrl),
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.contain,
+                          placeholder: (contest, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                        // Image.network(imageUrl),
                       ),
-                      SizedBox(height: 10),
-                      Text(message),
+                      message == '' ? SizedBox() : SizedBox(height: 10),
+                      message == '' ? SizedBox() : Text(message),
                     ],
                   ),
           ),
