@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sampark_app/config/images.dart';
 import 'package:sampark_app/controller/chat_controller.dart';
 import 'package:sampark_app/controller/image_picker.dart';
 import 'package:sampark_app/model/user_model.dart';
+import 'package:sampark_app/widgets/image_picker_bottom_sheet.dart';
 
 class TypeMessage extends StatelessWidget {
   final UserModel userModel;
@@ -50,9 +52,8 @@ class TypeMessage extends StatelessWidget {
           Obx(
             () => chatController.selectedImagePath.value == ''
                 ? InkWell(
-                    onTap: () async {
-                      chatController.selectedImagePath.value =
-                          await imagePickerController.pickImage();
+                    onTap: () {
+                      ImagePickerBottomSheet(context, chatController, imagePickerController);
                     },
                     child: Container(
                       height: 30,
@@ -88,11 +89,11 @@ class TypeMessage extends StatelessWidget {
                       height: 30,
                       width: 30,
                       child: chatController.isLoading.value
-                      ? CircularProgressIndicator()
-                      :SvgPicture.asset(
-                        AssetsImage.chatSendSvg,
-                        width: 25,
-                      ),
+                          ? CircularProgressIndicator()
+                          : SvgPicture.asset(
+                              AssetsImage.chatSendSvg,
+                              width: 25,
+                            ),
                     ),
                   )
                 : Container(
@@ -105,4 +106,6 @@ class TypeMessage extends StatelessWidget {
       ),
     );
   }
+
+  
 }

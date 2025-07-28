@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sampark_app/controller/auth_controller.dart';
 import 'package:sampark_app/controller/image_picker.dart';
 import 'package:sampark_app/controller/profile_controller.dart';
@@ -70,7 +71,7 @@ class ProfilePage extends StatelessWidget {
                                       onTap: () async {
                                         imagePath.value =
                                             await imagePickerController
-                                                .pickImage();
+                                                .pickImage(ImageSource.gallery);
 
                                         // print("image Picked" + imagePath.value);
                                       },
