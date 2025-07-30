@@ -4,13 +4,15 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sampark_app/config/images.dart';
 import 'package:sampark_app/controller/chat_controller.dart';
+import 'package:sampark_app/controller/group_controller.dart';
 import 'package:sampark_app/controller/image_picker.dart';
+import 'package:sampark_app/model/group_model.dart';
 import 'package:sampark_app/model/user_model.dart';
 import 'package:sampark_app/widgets/image_picker_bottom_sheet.dart';
 
-class TypeMessage extends StatelessWidget {
-  final UserModel userModel;
-  const TypeMessage({super.key, required this.userModel});
+class GroupTypeMessage extends StatelessWidget {
+  final GroupModel groupModel;
+  const GroupTypeMessage({super.key, required this.groupModel});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class TypeMessage extends StatelessWidget {
     ImagePickerController imagePickerController = Get.put(
       ImagePickerController(),
     );
+    GroupController groupController=Get.put(GroupController());
     return Container(
       // margin: EdgeInsets.all(10),
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -53,7 +56,11 @@ class TypeMessage extends StatelessWidget {
             () => chatController.selectedImagePath.value == ''
                 ? InkWell(
                     onTap: () {
-                      ImagePickerBottomSheet(context, chatController, imagePickerController);
+                      ImagePickerBottomSheet(
+                        context,
+                        chatController,
+                        imagePickerController,
+                      );
                     },
                     child: Container(
                       height: 30,
@@ -74,16 +81,9 @@ class TypeMessage extends StatelessWidget {
                     chatController.selectedImagePath.value != ''
                 ? InkWell(
                     onTap: () {
-                      if (messageController.text.isNotEmpty ||
-                          chatController.selectedImagePath.value.isNotEmpty) {
-                        chatController.sendMessage(
-                          userModel.id!,
-                          messageController.text,
-                          userModel,
-                        );
-                        messageController.clear();
-                        message.value = '';
-                      }
+                      groupController.sendGroupMessage(messageController.text, groupModel.id!, '');
+                      messageController.clear();
+                      message.value='';
                     },
                     child: Container(
                       height: 30,
@@ -106,6 +106,4 @@ class TypeMessage extends StatelessWidget {
       ),
     );
   }
-
-  
 }

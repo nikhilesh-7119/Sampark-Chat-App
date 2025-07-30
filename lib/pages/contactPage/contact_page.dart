@@ -6,6 +6,7 @@ import 'package:sampark_app/controller/contactController.dart';
 import 'package:sampark_app/pages/Chat/chat_page.dart';
 import 'package:sampark_app/pages/contactPage/widgets/contact_search.dart';
 import 'package:sampark_app/pages/contactPage/widgets/new_contact_tile.dart';
+import 'package:sampark_app/pages/groups/newGroup/new_group.dart';
 import 'package:sampark_app/pages/homePage/widgets/chat_tile.dart';
 
 class ContactPage extends StatelessWidget {
@@ -47,7 +48,9 @@ class ContactPage extends StatelessWidget {
             NewContactTile(
               btnName: 'New Group',
               icon: Icons.group_add,
-              onTap: () {},
+              onTap: () {
+                Get.to(NewGroup());
+              },
             ),
             SizedBox(height: 20),
             Row(children: [Text('Contacts on Sampark')]),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sampark_app/controller/contactController.dart';
 import 'package:sampark_app/controller/profile_controller.dart';
 import 'package:sampark_app/model/chat_model.dart';
 import 'package:sampark_app/model/chat_room_model.dart';
@@ -15,6 +16,7 @@ class ChatController extends GetxController {
   var uuid = Uuid();
   RxString selectedImagePath = ''.obs;
   ProfileController profileController = Get.put(ProfileController());
+  Contactcontroller contactcontroller = Get.put(Contactcontroller());
 
   String getRoomId(String targetUserId) {
     String currentUserId = auth.currentUser!.uid;
@@ -143,6 +145,7 @@ class ChatController extends GetxController {
           .collection('messages')
           .doc(chatId)
           .set(newChat.toJson());
+      await contactcontroller.saveContact(targetUser);
     } catch (e) {
       print(e);
     }
@@ -163,4 +166,6 @@ class ChatController extends GetxController {
               .toList(),
         );
   }
+
+  
 }
