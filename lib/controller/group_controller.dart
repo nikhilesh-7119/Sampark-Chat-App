@@ -17,7 +17,7 @@ class GroupController extends GetxController {
   ProfileController profileController = Get.put(ProfileController());
   RxBool isLoading = false.obs;
   RxList<GroupModel> groupList = <GroupModel>[].obs;
-  RxString selectedImagePath=''.obs;
+  RxString selectedImagePath = ''.obs;
 
   @override
   void onInit() async {
@@ -47,14 +47,14 @@ class GroupController extends GetxController {
 
     String groupId = uuid.v6();
     groupMembers.add(
-    UserModel(
-      id: auth.currentUser!.uid,
-      name: auth.currentUser!.displayName,
-      profileImage: auth.currentUser!.photoURL,
-      email: auth.currentUser!.email,
-      role: 'Admin'
-    ),
-  );
+      UserModel(
+        id: auth.currentUser!.uid,
+        name: profileController.currentUser.value.name,
+        profileImage: profileController.currentUser.value.profileImage,
+        email: profileController.currentUser.value.email,
+        role: 'Admin',
+      ),
+    );
     try {
       String imageUrl = await profileController.uploadFileToSupabase(imagePath);
 
@@ -104,8 +104,12 @@ class GroupController extends GetxController {
     String groupId,
     String imagePath,
   ) async {
+    isLoading.value = true;
     var chatId = uuid.v6();
-    String imageUrl = await profileController.uploadFileToSupabase(imagePath);
+    String imageUrl = await profileController.uploadFileToSupabase(
+      selectedImagePath.value,
+    );
+    selectedImagePath.value = '';
     var newChat = ChatModel(
       id: chatId,
       message: message,
@@ -121,6 +125,8 @@ class GroupController extends GetxController {
         .collection('messages')
         .doc(chatId)
         .set(newChat.toJson());
+
+    isLoading.value = false;
   }
 
   Stream<List<ChatModel>> getGroupMessages(String groupId) {
@@ -135,5 +141,15 @@ class GroupController extends GetxController {
               .map((doc) => ChatModel.fromJson(doc.data()))
               .toList(),
         );
+  }
+
+  Future<void> addMemberToGroup(String groupId, UserModel user) async {
+    isLoading.value = true;
+    await db.collection('groups').doc(groupId).update({
+      'members': FieldValue.arrayUnion([user.toJson()]),
+    });
+    getGroups();
+    isLoading.value = false;
+
   }
 }

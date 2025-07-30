@@ -17,12 +17,12 @@ class GroupTypeMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController messageController = TextEditingController();
-    ChatController chatController = Get.put(ChatController());
     RxString message = ''.obs;
     ImagePickerController imagePickerController = Get.put(
       ImagePickerController(),
     );
     GroupController groupController=Get.put(GroupController());
+
     return Container(
       // margin: EdgeInsets.all(10),
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -53,12 +53,12 @@ class GroupTypeMessage extends StatelessWidget {
           ),
           SizedBox(width: 10),
           Obx(
-            () => chatController.selectedImagePath.value == ''
+            () => groupController.selectedImagePath.value == ''
                 ? InkWell(
                     onTap: () {
                       ImagePickerBottomSheet(
                         context,
-                        chatController,
+                        groupController.selectedImagePath,
                         imagePickerController,
                       );
                     },
@@ -78,7 +78,7 @@ class GroupTypeMessage extends StatelessWidget {
           Obx(
             () =>
                 message.value != '' ||
-                    chatController.selectedImagePath.value != ''
+                    groupController.selectedImagePath.value != ''
                 ? InkWell(
                     onTap: () {
                       groupController.sendGroupMessage(messageController.text, groupModel.id!, '');
@@ -88,7 +88,7 @@ class GroupTypeMessage extends StatelessWidget {
                     child: Container(
                       height: 30,
                       width: 30,
-                      child: chatController.isLoading.value
+                      child: groupController.isLoading.value
                           ? CircularProgressIndicator()
                           : SvgPicture.asset(
                               AssetsImage.chatSendSvg,

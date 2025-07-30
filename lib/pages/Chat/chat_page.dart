@@ -7,7 +7,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sampark_app/config/images.dart';
+import 'package:sampark_app/controller/call_controller.dart';
 import 'package:sampark_app/controller/chat_controller.dart';
+import 'package:sampark_app/controller/profile_controller.dart';
 import 'package:sampark_app/model/chat_model.dart';
 import 'package:sampark_app/model/user_model.dart';
 import 'package:sampark_app/pages/Chat/widgets/chat_bubble.dart';
@@ -22,7 +24,9 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
     ChatController chatController = Get.put(ChatController());
-    TextEditingController messageController = TextEditingController();
+    CallController callController=Get.put(CallController());
+    ProfileController profileController=Get.put(ProfileController());
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -64,14 +68,33 @@ class ChatPage extends StatelessWidget {
                     userModel.name ?? 'User',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  Text('Online', style: Theme.of(context).textTheme.labelSmall),
+                  StreamBuilder(
+                    stream: chatController.getStatus(userModel.id!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text('. . . .');
+                      } else {
+                        return Text(
+                          snapshot.data!.status ?? 'null',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: snapshot.data!.status == 'online'
+                                ? Colors.green
+                                : Colors.grey,
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
             ],
           ),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.phone)),
+          IconButton(onPressed: () {
+            callController.callAction(userModel, profileController.currentUser.value);
+          }, icon: Icon(Icons.phone)),
           IconButton(onPressed: () {}, icon: Icon(Icons.video_call)),
         ],
       ),
@@ -135,7 +158,9 @@ class ChatPage extends StatelessWidget {
                                     image: DecorationImage(
                                       image: FileImage(
                                         File(
-                                          chatController.selectedImagePath.value,
+                                          chatController
+                                              .selectedImagePath
+                                              .value,
                                         ),
                                       ),
                                       fit: BoxFit.contain,
@@ -148,9 +173,15 @@ class ChatPage extends StatelessWidget {
                                   height: 500,
                                 ),
                                 Positioned(
-                                  right:0,
-                                  child: IconButton(onPressed: (){chatController.selectedImagePath.value='';}, icon: Icon(Icons.close))
-                                  )
+                                  right: 0,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      chatController.selectedImagePath.value =
+                                          '';
+                                    },
+                                    icon: Icon(Icons.close),
+                                  ),
+                                ),
                               ],
                             ),
                           )

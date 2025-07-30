@@ -53,7 +53,11 @@ class TypeMessage extends StatelessWidget {
             () => chatController.selectedImagePath.value == ''
                 ? InkWell(
                     onTap: () {
-                      ImagePickerBottomSheet(context, chatController, imagePickerController);
+                      ImagePickerBottomSheet(
+                        context,
+                        chatController.selectedImagePath,
+                        imagePickerController,
+                      );
                     },
                     child: Container(
                       height: 30,
@@ -106,6 +110,4 @@ class TypeMessage extends StatelessWidget {
       ),
     );
   }
-
-  
 }

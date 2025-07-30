@@ -6,15 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sampark_app/config/images.dart';
-import 'package:sampark_app/controller/chat_controller.dart';
 import 'package:sampark_app/controller/group_controller.dart';
 import 'package:sampark_app/model/chat_model.dart';
 import 'package:sampark_app/model/group_model.dart';
-import 'package:sampark_app/model/user_model.dart';
 import 'package:sampark_app/pages/Chat/widgets/chat_bubble.dart';
-import 'package:sampark_app/pages/Chat/widgets/type_message.dart';
 import 'package:sampark_app/pages/groupChat/group_type_message.dart';
-import 'package:sampark_app/pages/userProfile/user_profile_page.dart';
+import 'package:sampark_app/pages/groupInfo/group_info.dart';
 
 class GroupChatPage extends StatelessWidget {
   final GroupModel groupModel;
@@ -23,7 +20,6 @@ class GroupChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
-    ChatController chatController = Get.put(ChatController());
     GroupController groupController=Get.put(GroupController());
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +51,7 @@ class GroupChatPage extends StatelessWidget {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () {
-            // Get.to(UserProfilePage(userModel: userModel));
+            Get.to(GroupInfo(groupModel: groupModel,));
           },
           child: Row(
             children: [
@@ -124,7 +120,7 @@ class GroupChatPage extends StatelessWidget {
                     },
                   ),
                   Obx(
-                    () => (chatController.selectedImagePath.value != '')
+                    () => (groupController.selectedImagePath.value != '')
                         ? Positioned(
                             bottom: 0,
                             left: 0,
@@ -137,7 +133,7 @@ class GroupChatPage extends StatelessWidget {
                                     image: DecorationImage(
                                       image: FileImage(
                                         File(
-                                          chatController.selectedImagePath.value,
+                                          groupController.selectedImagePath.value,
                                         ),
                                       ),
                                       fit: BoxFit.contain,
@@ -151,7 +147,7 @@ class GroupChatPage extends StatelessWidget {
                                 ),
                                 Positioned(
                                   right:0,
-                                  child: IconButton(onPressed: (){chatController.selectedImagePath.value='';}, icon: Icon(Icons.close))
+                                  child: IconButton(onPressed: (){groupController.selectedImagePath.value='';}, icon: Icon(Icons.close))
                                   )
                               ],
                             ),

@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:sampark_app/config/page_path.dart';
 import 'package:sampark_app/config/themes.dart';
+import 'package:sampark_app/controller/call_controller.dart';
 import 'package:sampark_app/firebase_options.dart';
 import 'package:sampark_app/pages/Auth/auth_page.dart';
 import 'package:sampark_app/pages/SplashPage/splash_page.dart';
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // CallController callController=Get.put(CallController());
     return GetMaterialApp(
       builder: FToastBuilder(),
       title: 'Sampark',

@@ -6,6 +6,7 @@ import 'package:sampark_app/config/strings.dart';
 import 'package:sampark_app/controller/contactController.dart';
 import 'package:sampark_app/controller/image_picker.dart';
 import 'package:sampark_app/controller/profile_controller.dart';
+import 'package:sampark_app/controller/status_controller.dart';
 import 'package:sampark_app/pages/groups/groups_page.dart';
 import 'package:sampark_app/pages/homePage/widgets/chat_list.dart';
 import 'package:sampark_app/pages/homePage/widgets/tabBar.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     Contactcontroller contactcontroller=Get.put(Contactcontroller());
     ProfileController profileController = Get.put(ProfileController());
     ImagePickerController image=Get.put(ImagePickerController());
+    StatusController statusController=Get.put(StatusController());
     
 
 
