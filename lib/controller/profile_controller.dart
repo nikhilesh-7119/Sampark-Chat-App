@@ -49,6 +49,7 @@ class ProfileController extends GetxController {
       about: about,
       profileImage: imageUrl=='' ? currentUser.value.profileImage : imageLink,
       phoneNumber: number,
+      status: 'online',
     );
 
     await db.collection('users').doc(auth.currentUser!.uid).set(

@@ -35,9 +35,15 @@ class StatusController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onClose() async {
-    await db.collection('users').doc(auth.currentUser!.uid).update({
-        'status':'offline'
+    final user = auth.currentUser;
+    if (user != null) {
+      await db.collection('users').doc(user.uid).update({
+        'status': 'offline'
       });
+    }
+    // await db.collection('users').doc(auth.currentUser!.uid).update({
+    //     'status':'offline'
+    //   });
     WidgetsBinding.instance.removeObserver(this);
     
     super.onClose();

@@ -14,6 +14,8 @@ import 'package:sampark_app/model/chat_model.dart';
 import 'package:sampark_app/model/user_model.dart';
 import 'package:sampark_app/pages/Chat/widgets/chat_bubble.dart';
 import 'package:sampark_app/pages/Chat/widgets/type_message.dart';
+import 'package:sampark_app/pages/callPage/audio_call_page.dart';
+import 'package:sampark_app/pages/callPage/video_call_page.dart';
 import 'package:sampark_app/pages/userProfile/user_profile_page.dart';
 
 class ChatPage extends StatelessWidget {
@@ -24,8 +26,8 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
     ChatController chatController = Get.put(ChatController());
-    CallController callController=Get.put(CallController());
-    ProfileController profileController=Get.put(ProfileController());
+    CallController callController = Get.put(CallController());
+    ProfileController profileController = Get.put(ProfileController());
 
     return Scaffold(
       appBar: AppBar(
@@ -92,10 +94,28 @@ class ChatPage extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(onPressed: () {
-            callController.callAction(userModel, profileController.currentUser.value);
-          }, icon: Icon(Icons.phone)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.video_call)),
+          IconButton(
+            onPressed: () {
+              Get.to(AudioCallPage(target: userModel));
+              callController.callAction(
+                userModel,
+                'audio',
+                profileController.currentUser.value,
+              );
+            },
+            icon: Icon(Icons.phone),
+          ),
+          IconButton(
+            onPressed: () {
+              Get.to(VideoCallPage(target: userModel));
+              callController.callAction(
+                userModel,
+                'video',
+                profileController.currentUser.value,
+              );
+            },
+            icon: Icon(Icons.video_call),
+          ),
         ],
       ),
 

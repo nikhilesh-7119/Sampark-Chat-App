@@ -14,6 +14,13 @@ class AuthController extends GetxController {
     isLoading.value = true;
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
+
+      final user = auth.currentUser;
+      if (user != null) {
+        await db.collection('users').doc(user.uid).update({
+          'status': 'online'
+        });
+      }
       Get.offAllNamed('/homePage');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -50,6 +57,12 @@ class AuthController extends GetxController {
   }
 
   Future<void> logoutUser() async {
+    final user = auth.currentUser;
+    if (user != null) {
+      await db.collection('users').doc(user.uid).update({
+        'status': 'offline'
+      });
+    }
     await auth.signOut();
     Get.offAllNamed('/authPage');
   }
@@ -59,6 +72,7 @@ class AuthController extends GetxController {
       email: email,
       name: name,
       id: auth.currentUser!.uid,
+      status: 'online',
     );
 
     try {

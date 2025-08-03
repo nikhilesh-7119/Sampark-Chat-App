@@ -39,7 +39,7 @@ class ProfilePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Get.to(AuthController().logoutUser());
+              AuthController().logoutUser();
             },
             icon: Icon(Icons.logout),
           ),
