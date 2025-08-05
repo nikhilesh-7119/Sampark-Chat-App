@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     ProfileController profileController = Get.put(ProfileController());
     ImagePickerController image=Get.put(ImagePickerController());
     StatusController statusController=Get.put(StatusController());
+    CallController callController=Get.put(CallController());
     
 
 

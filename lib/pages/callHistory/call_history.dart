@@ -22,7 +22,7 @@ class CallHistory extends StatelessWidget {
                     snapshot.data![index].callerPic ??
                     AssetsImage.defaultProfileUrl,
                 lastTime: snapshot.data![index].time ?? '...',
-                lastChat: snapshot.data![index].receiverName ?? '....',
+                lastChat: '${snapshot.data![index].receiverName}' + ' ${snapshot.data![index].type}' ?? '....',
               );
             },
             itemCount: snapshot.data!.length,
